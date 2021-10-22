@@ -1,0 +1,13 @@
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+
+
+<div class="auth-footer-btn d-flex justify-content-center">
+    {% for provider in socialaccount_providers %}
+        <a class="btn btn-{{ provider.id }}"
+           href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"><i
+                data-feather="mail"></i></a>
+    {% endfor %}
+</div>
+
