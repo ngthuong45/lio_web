@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
     # My App
     'pages',
+    'zalo',
 ]
 
 MIDDLEWARE = [
