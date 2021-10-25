@@ -4,3 +4,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/homepage.html'
+
+
+class AccountView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/settings/account.html'
+
+
+class ConnectionsView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/settings/connections.html'
+
+
+class BillingView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/settings/billing.html'
