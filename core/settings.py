@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = int(os.environ.get('DEBUG'))  # 1 == True, 0 == False
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
-BASE_URL = os.environ.get('BASE_URL', 'http://localhost')
+BASE_URL = os.environ.get('BASE_URL', 'https://a45f-113-172-95-38.ap.ngrok.io')
 
 # Application definition
 AUTH_USER_MODEL = 'accounts.User'

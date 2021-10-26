@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 
 from core.settings import ZALO_APP_ID, ZALO_OA_SECRET_KEY, ZALO_APP_KEY, BASE_URL
 from zalo.models import ZaloWebhook, ZaloOA
@@ -100,7 +101,8 @@ class ZaloOa(LoginRequiredMixin, generic.View):
                             content_type='text/plain',
                             status=400)
 
-    def get_access_token(self, user_id, code_verifier, zalo_auth_code):
+    @staticmethod
+    def get_access_token(user_id, code_verifier, zalo_auth_code):
         """
         response:
                 {
@@ -119,18 +121,7 @@ class ZaloOa(LoginRequiredMixin, generic.View):
         }
 
         result = requests.post(url=url, headers=headers, data=data).json()
-        info_oa = self.get_info_oa(access_token=result['access_token'])
-
-        ZaloOA.objects.create(
-            oa_id=str(info_oa['oa_id']),
-            name=info_oa['name'],
-            avatar=info_oa['avatar'],
-            is_verified=info_oa['is_verified'],
-            access_token=result['access_token'],
-            refresh_token=result['refresh_token'],
-            expires_in=result['expires_in'],
-            user_id=user_id
-        )
+        return result
 
     def post(self, request, *args, **kwargs):
         try:
@@ -165,7 +156,7 @@ class ZaloOa(LoginRequiredMixin, generic.View):
         if (zalo_oa_id is None
                 or zalo_code_challenge is None
                 or zalo_auth_code is None):
-            return HttpResponse('Not found code/oa_id/code_challenge', content_type='text/plain', status=400)
+            return HttpResponse('Not found code|oa_id|code_challenge', content_type='text/plain', status=400)
 
         try:
             user = User.objects.get(id=request.user.id)
@@ -183,6 +174,18 @@ class ZaloOa(LoginRequiredMixin, generic.View):
         if ZaloOA.objects.filter(oa_id=zalo_oa_id, user_id=user_id):
             return HttpResponse('oa_id is exist', content_type='text/plain')
 
-        self.get_access_token(user_id, code_verifier, zalo_auth_code)
+        zalo_token = self.get_access_token(user_id, code_verifier, zalo_auth_code)
+        info_oa = self.get_info_oa(access_token=zalo_token['access_token'])
+        ZaloOA.objects.create(
+            oa_id=str(info_oa['oa_id']),
+            name=info_oa['name'],
+            avatar=info_oa['avatar'],
+            is_verified=info_oa['is_verified'],
+            access_token=zalo_token['access_token'],
+            refresh_token=zalo_token['refresh_token'],
+            expires_in=zalo_token['expires_in'],
+            user_id=user_id
+        )
 
-        return HttpResponse('okay!', content_type='text/plain')
+        success_alert = f"Tài khoản Zalo OA - {info_oa['name']} kết nối thành công!"
+        return render(request, 'pages/homepage.html', {'success_alert': success_alert})
