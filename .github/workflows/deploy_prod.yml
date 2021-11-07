@@ -75,6 +75,6 @@ jobs:
             echo "ZALO_OA_SECRET_KEY=${{ secrets.ZALO_OA_SECRET_KEY_PROD }}" >> .env.prod
             python manage.py makemigrations
             python manage.py migrate
-            python manage.py collectstatic -y
+            python manage.py collectstatic --noinput
             sudo chown -R nobody:nogroup /usr/local/lsws/Example/html/lio_web
             sudo killall lswsgi
