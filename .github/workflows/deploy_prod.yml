@@ -54,11 +54,10 @@ jobs:
           password: ${{ secrets.SERVER_PRODUCTION_PASSWORD }}
           script: |
             source /usr/local/lsws/Example/html/bin/activate
-            cd /usr/local/lsws/Example/html/
-            sudo rm -rf lio_web
-            git clone https://${{ secrets.__GITHUB_PERSONAL_TOKEN }}@github.com/ngthuong45/lio_web.git
-            cd lio_web
+            cd /usr/local/lsws/Example/html/lio_web
+            git pull https://${{ secrets.__GITHUB_PERSONAL_TOKEN }}@github.com/ngthuong45/lio_web.git main
             pip install -r requirements.txt
+            sudo rm -rf .env.prod
             echo "DEBUG=1" >> .env.prod
             echo "SECRET_KEY=${{ secrets.SECRET_KEY_PROD }}" >> .env.prod
             echo "BASE_URL=${{ secrets.BASE_URL_PROD }}" >> .env.prod
@@ -73,7 +72,6 @@ jobs:
             echo "ZALO_APP_ID=${{ secrets.ZALO_APP_ID_PROD }}" >> .env.prod
             echo "ZALO_APP_KEY=${{ secrets.ZALO_APP_KEY_PROD }}" >> .env.prod
             echo "ZALO_OA_SECRET_KEY=${{ secrets.ZALO_OA_SECRET_KEY_PROD }}" >> .env.prod
-            python manage.py makemigrations
             python manage.py migrate
             python manage.py collectstatic --noinput
             sudo chown -R nobody:nogroup /usr/local/lsws/Example/html/lio_web
