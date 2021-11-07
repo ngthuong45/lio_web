@@ -144,4 +144,4 @@ cython_debug/
 # Project
 **/migrations/**
 #**/migrations/**
-#!**/migrations/**/.gitkeep
+!**/migrations/**/.gitkeep
