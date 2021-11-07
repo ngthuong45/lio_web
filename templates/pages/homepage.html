@@ -4,18 +4,18 @@
 
 {% block title %}Dashboard{% endblock title %}
 
-{% block css %}
-    <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/vendors.min.css' %}">
+<!-- BEGIN: Vendor CSS-->
+{% block vendor_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/charts/apexcharts.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/toastr.min.css' %}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'app-assets/vendors/css/tables/datatable/dataTables.bootstrap5.min.css' %}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'app-assets/vendors/css/tables/datatable/responsive.bootstrap5.min.css' %}">
-    <!-- END: Vendor CSS-->
+{% endblock vendor_css %}
+<!-- END: Vendor CSS-->
 
-    <!-- BEGIN: Theme CSS-->
+<!-- BEGIN: Theme CSS-->
+{% block theme_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap-extended.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/colors.min.css' %}">
@@ -23,20 +23,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/dark-layout.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/bordered-layout.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/semi-dark-layout.min.css' %}">
+{% endblock theme_css %}
+<!-- END: Theme CSS-->
 
-    <!-- BEGIN: Page CSS-->
+<!-- BEGIN: Page CSS-->
+{% block page_css %}
     <link rel="stylesheet" type="text/css"
           href="{% static 'app-assets/css/core/menu/menu-types/vertical-menu.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/plugins/charts/chart-apex.min.css' %}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'app-assets/css/plugins/extensions/ext-component-toastr.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/app-invoice-list.min.css' %}">
-    <!-- END: Page CSS-->
-
-    <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
-    <!-- END: Custom CSS-->
-{% endblock css %}
+{% endblock page_css %}
+<!-- END: Page CSS-->
 
 <!-- BEGIN: Main Menu-->
 {% block analytics_active %}class="active"{% endblock %}
@@ -545,30 +542,29 @@
 {% endblock content %}
 <!-- END: Content-->
 
-{% block js %}
-    <!-- BEGIN: Vendor JS-->
-    <script src="{% static 'app-assets/vendors/js/vendors.min.js' %}"></script>
-    <!-- BEGIN Vendor JS-->
+<!-- BEGIN: Page Vendor JS-->
+{% block page_vendor_js %}
+<script src="{% static 'app-assets/vendors/js/charts/apexcharts.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/moment.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/datatables.buttons.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.bootstrap5.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/responsive.bootstrap5.js' %}"></script>
+{% endblock page_vendor_js %}
+<!-- END: Page Vendor JS-->
 
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{% static 'app-assets/vendors/js/charts/apexcharts.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/extensions/toastr.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/extensions/moment.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/datatables.buttons.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.bootstrap5.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/responsive.bootstrap5.js' %}"></script>
-    <!-- END: Page Vendor JS-->
+<!-- BEGIN: Theme JS-->
+{% block theme_js %}
+<script src="{% static 'app-assets/js/core/app-menu.min.js' %}"></script>
+<script src="{% static 'app-assets/js/core/app.min.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/customizer.min.js' %}"></script>
+{% endblock theme_js %}
+<!-- END: Theme JS-->
 
-    <!-- BEGIN: Theme JS-->
-    <script src="{% static 'app-assets/js/core/app-menu.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/core/app.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/scripts/customizer.min.js' %}"></script>
-    <!-- END: Theme JS-->
-
-    <!-- BEGIN: Page JS-->
-    <script src="{% static 'app-assets/js/scripts/pages/dashboard-analytics.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/scripts/pages/app-invoice-list.min.js' %}"></script>
-    <!-- END: Page JS-->
-{% endblock js %}
+<!-- BEGIN: Page JS-->
+{% block page_js %}
+<script src="{% static 'app-assets/js/scripts/pages/dashboard-analytics.min.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/pages/app-invoice-list.min.js' %}"></script>
+{% endblock page_js %}
+<!-- END: Page JS-->

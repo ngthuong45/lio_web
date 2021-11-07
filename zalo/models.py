@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 
+
 class ZaloWebhook(models.Model):
     event_name = models.CharField(max_length=255)
     received_at = models.DateTimeField(help_text='When we received the event.')

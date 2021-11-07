@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = int(os.environ.get('DEBUG'))  # 1 == True, 0 == False
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
-BASE_URL = os.environ.get('BASE_URL', 'https://a45f-113-172-95-38.ap.ngrok.io')
+BASE_URL = os.environ.get('BASE_URL', 'https://3138-113-172-95-38.ap.ngrok.io')
 
 # Application definition
 AUTH_USER_MODEL = 'accounts.User'
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     # My App
     'accounts',
     'pages',
+    'features',
     'zalo',
 ]
 
@@ -211,3 +212,6 @@ ZALO_URL_SECRET_KEY = os.environ.get('ZALO_URL_SECRET_KEY')
 ZALO_APP_ID = os.environ.get('ZALO_APP_ID')
 ZALO_APP_KEY = os.environ.get('ZALO_APP_KEY')
 ZALO_OA_SECRET_KEY = os.environ.get('ZALO_OA_SECRET_KEY')
+
+# Config Message Django
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

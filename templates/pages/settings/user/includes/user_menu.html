@@ -1,0 +1,32 @@
+<!-- User Pills -->
+<ul class="nav nav-pills mb-2">
+    <li class="nav-item">
+        <a class="nav-link {% if active_tab == 'account' %}active{% endif %}" href="{% url 'user-account' %}">
+            <i data-feather="user" class="font-medium-3 me-50"></i>
+            <span class="fw-bold">Account</span></a
+        >
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="app-user-view-security.html">
+            <i data-feather="lock" class="font-medium-3 me-50"></i>
+            <span class="fw-bold">Security</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="app-user-view-billing.html">
+            <i data-feather="bookmark" class="font-medium-3 me-50"></i>
+            <span class="fw-bold">Billing & Plans</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="app-user-view-notifications.html">
+            <i data-feather="bell" class="font-medium-3 me-50"></i><span class="fw-bold">Notifications</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_tab == 'connections' %}active{% endif %}" href="{% url 'user-account-connections' %}">
+            <i data-feather="link" class="font-medium-3 me-50"></i><span class="fw-bold">Connections</span>
+        </a>
+    </li>
+</ul>
+<!--/ User Pills -->

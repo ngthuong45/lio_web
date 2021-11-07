@@ -13,11 +13,12 @@ from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 from core.settings import ZALO_APP_ID, ZALO_OA_SECRET_KEY, ZALO_APP_KEY, BASE_URL
 from zalo.models import ZaloWebhook, ZaloOA
 from accounts.models import User
+from django.contrib import messages
 
 
 @csrf_exempt
@@ -88,21 +89,7 @@ def zalo_webhook(request):
 class ZaloOa(LoginRequiredMixin, generic.View):
 
     @staticmethod
-    def get_info_oa(access_token):
-        url = 'https://openapi.zalo.me/v2.0/oa/getoa'
-        headers = {'access_token': access_token}
-
-        result = requests.get(url=url, headers=headers).json()
-
-        if result['error'] == 0 and 'data' in result:
-            return result['data']
-
-        return HttpResponse(f"Zalo get information OA error: {result['message']}",
-                            content_type='text/plain',
-                            status=400)
-
-    @staticmethod
-    def get_access_token(user_id, code_verifier, zalo_auth_code):
+    def get_access_token(code_verifier, zalo_auth_code):
         """
         response:
                 {
@@ -119,9 +106,24 @@ class ZaloOa(LoginRequiredMixin, generic.View):
             'grant_type': 'authorization_code',
             'code_verifier': code_verifier
         }
+        return requests.post(url=url, headers=headers, data=data).json()
 
-        result = requests.post(url=url, headers=headers, data=data).json()
-        return result
+    def get_info_oa(self, code_verifier, zalo_auth_code):
+        url = 'https://openapi.zalo.me/v2.0/oa/getoa'
+        token = self.get_access_token(code_verifier, zalo_auth_code)
+        headers = {'access_token': token['access_token']}
+        info_oa = requests.get(url=url, headers=headers).json()
+        return token, info_oa['data']
+
+    @staticmethod
+    def verify_code_challenge(code_verifier, code_challenge):
+        hashed = hashlib.sha256(code_verifier.encode('ascii')).digest()
+        encoded = base64.urlsafe_b64encode(hashed)
+        user_code_challenge = encoded.decode('ascii')[:-1]
+
+        if code_challenge != user_code_challenge:
+            return False
+        return True
 
     def post(self, request, *args, **kwargs):
         try:
@@ -156,36 +158,64 @@ class ZaloOa(LoginRequiredMixin, generic.View):
         if (zalo_oa_id is None
                 or zalo_code_challenge is None
                 or zalo_auth_code is None):
-            return HttpResponse('Not found code|oa_id|code_challenge', content_type='text/plain', status=400)
-
-        try:
-            user = User.objects.get(id=request.user.id)
-        except User.DoesNotExist:
-            return HttpResponse('Not found user.', content_type='text/plain', status=400)
-
-        code_verifier = user.secret_key
-        hashed = hashlib.sha256(code_verifier.encode('ascii')).digest()
-        encoded = base64.urlsafe_b64encode(hashed)
-        user_code_challenge = encoded.decode('ascii')[:-1]
-
-        if zalo_code_challenge != user_code_challenge:
-            return HttpResponse('Incorrect code challenge.', content_type='text/plain', status=400)
+            messages.error(
+                request,
+                message=f"Kết nối thất bại! vì không có mã xác thực.",
+                extra_tags='center_notification'
+            )
+            return redirect('user-account')
 
         if ZaloOA.objects.filter(oa_id=zalo_oa_id, user_id=user_id):
-            return HttpResponse('oa_id is exist', content_type='text/plain')
+            messages.warning(
+                request,
+                message=f"Tài khoản Zalo OA này đã được kết nối từ trước!",
+                extra_tags='center_notification'
+            )
+            return redirect('user-account')
 
-        zalo_token = self.get_access_token(user_id, code_verifier, zalo_auth_code)
-        info_oa = self.get_info_oa(access_token=zalo_token['access_token'])
+        try:
+            user = User.objects.get(id=user_id)
+            code_verifier = user.secret_key
+        except User.DoesNotExist:
+            messages.error(
+                request,
+                message=f"Kết nối thất bại! vì không tìm thấy user người dùng.",
+                extra_tags='center_notification'
+            )
+            return redirect('user-account')
+
+        # Verify code challenge
+        if not self.verify_code_challenge(code_verifier, zalo_code_challenge):
+            messages.error(
+                request,
+                message=f"Kết nối thất bại! vì xác thực không thành công!!!",
+                extra_tags='center_notification'
+            )
+            return redirect('user-account')
+
+        try:
+            token, info_oa = self.get_info_oa(code_verifier, zalo_auth_code)
+        except Exception as error:
+            messages.error(
+                request,
+                message=f"Kết nối thất bại! vì lấy dữ liệu OA từ Zalo không thành công!!!",
+                extra_tags='center_notification'
+            )
+            return redirect('user-account')
+
         ZaloOA.objects.create(
             oa_id=str(info_oa['oa_id']),
             name=info_oa['name'],
             avatar=info_oa['avatar'],
             is_verified=info_oa['is_verified'],
-            access_token=zalo_token['access_token'],
-            refresh_token=zalo_token['refresh_token'],
-            expires_in=zalo_token['expires_in'],
+            access_token=token['access_token'],
+            refresh_token=token['refresh_token'],
+            expires_in=token['expires_in'],
             user_id=user_id
         )
-
-        success_alert = f"Tài khoản Zalo OA - {info_oa['name']} kết nối thành công!"
-        return render(request, 'pages/homepage.html', {'success_alert': success_alert})
+        messages.success(
+            request,
+            message=f"Tài khoản Zalo OA: {info_oa['name']} kết nối thành công!",
+            extra_tags='center_notification'
+        )
+        return redirect('user-account')

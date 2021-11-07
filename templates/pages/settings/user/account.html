@@ -4,12 +4,11 @@
 
 {% block title %}Accounts{% endblock title %}
 
-{% block css %}
-    <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/vendors.min.css' %}">
+<!-- BEGIN: Vendor CSS-->
+{% block vendor_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/forms/select/select2.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/animate/animate.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/sweetalert2.min.css' %}">
+
     <link rel="stylesheet" type="text/css"
           href="{% static 'app-assets/vendors/css/tables/datatable/dataTables.bootstrap5.min.css' %}">
     <link rel="stylesheet" type="text/css"
@@ -18,9 +17,11 @@
           href="{% static 'app-assets/vendors/css/tables/datatable/buttons.bootstrap5.min.css' %}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'app-assets/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css' %}">
-    <!-- END: Vendor CSS-->
+{% endblock vendor_css %}
+<!-- END: Vendor CSS-->
 
-    <!-- BEGIN: Theme CSS-->
+<!-- BEGIN: Theme CSS-->
+{% block theme_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/bootstrap-extended.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/colors.min.css' %}">
@@ -28,19 +29,16 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/dark-layout.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/bordered-layout.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/themes/semi-dark-layout.min.css' %}">
+{% endblock theme_css %}
+<!-- END: Theme CSS-->
 
-    <!-- BEGIN: Page CSS-->
+<!-- BEGIN: Page CSS-->
+{% block page_css %}
     <link rel="stylesheet" type="text/css"
           href="{% static 'app-assets/css/core/menu/menu-types/vertical-menu.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/plugins/forms/form-validation.css' %}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'app-assets/css/plugins/extensions/ext-component-sweet-alerts.min.css' %}">
-    <!-- END: Page CSS-->
-
-    <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
-    <!-- END: Custom CSS-->
-{% endblock css %}
+{% endblock page_css %}
+<!-- END: Page CSS-->
 
 <!-- BEGIN: Main Menu-->
 {% block account_active %}class="active"{% endblock %}
@@ -191,54 +189,69 @@
 
                         <!-- User Content -->
                         <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
-                            <!-- User Pills -->
-                            <ul class="nav nav-pills mb-2">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="{% url 'user-account' %}">
-                                        <i data-feather="user" class="font-medium-3 me-50"></i>
-                                        <span class="fw-bold">Account</span></a
-                                    >
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-security.html">
-                                        <i data-feather="lock" class="font-medium-3 me-50"></i>
-                                        <span class="fw-bold">Security</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-billing.html">
-                                        <i data-feather="bookmark" class="font-medium-3 me-50"></i>
-                                        <span class="fw-bold">Billing & Plans</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-notifications.html">
-                                        <i data-feather="bell" class="font-medium-3 me-50"></i><span class="fw-bold">Notifications</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-connections.html">
-                                        <i data-feather="link" class="font-medium-3 me-50"></i><span class="fw-bold">Connections</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!--/ User Pills -->
+                            <!-- User menu -->
+                            {% include "pages/settings/user/includes/user_menu.html" with active_tab='account' %}
+                            <!--/ User menu -->
 
                             <!-- Project table -->
                             <div class="card">
                                 <h4 class="card-header">User's Projects List</h4>
                                 <div class="table-responsive">
-                                    <table class="table datatable-project">
-                                        <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Project</th>
-                                            <th class="text-nowrap">Total Task</th>
-                                            <th>Progress</th>
-                                            <th>Hours</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
+                                    <div id="DataTables_Table_0_wrapper"
+                                         class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                        <table class="table datatable-project dataTable no-footer dtr-column"
+                                               id="DataTables_Table_0" role="grid" style="width: 953px;">
+                                            <thead>
+                                            <tr role="row">
+                                                <th class="sorting_disabled control" rowspan="1" colspan="1"
+                                                    style="width: 0px; display: none;"></th>
+                                                <th class="sorting_disabled" rowspan="1" colspan="1"
+                                                    style="width: 380px;">Project
+                                                </th>
+                                                <th class="text-nowrap sorting_disabled" rowspan="1" colspan="1"
+                                                    style="width: 154px;">Total Task
+                                                </th>
+                                                <th class="sorting_disabled" rowspan="1" colspan="1"
+                                                    style="width: 141px;">Progress
+                                                </th>
+                                                <th class="sorting_disabled" rowspan="1" colspan="1"
+                                                    style="width: 109px;">End Date
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for oa in zalo_oa %}
+                                                <tr class="odd">
+                                                    <td class=" control" tabindex="0" style="display: none;"></td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-left align-items-center">
+                                                            <div class="avatar-wrapper">
+                                                                <div class="avatar me-1"><img
+                                                                        src="{{ oa.avatar }}"
+                                                                        alt="Project Image" width="32"
+                                                                        class="rounded-circle"></div>
+                                                            </div>
+                                                            <div class="d-flex flex-column"><span
+                                                                    class="text-truncate fw-bolder">{{ oa.name }}</span><small
+                                                                    class="text-muted">Zalo OA</small></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>122/240</td>
+                                                    <td>
+                                                        <div class="d-flex flex-column"><small class="mb-1">60%</small>
+                                                            <div class="progress w-100 me-3" style="height: 6px;">
+                                                                <div class="progress-bar bg-info" style="width: 60%"
+                                                                     aria-valuenow="60%" aria-valuemin="0"
+                                                                     aria-valuemax="100"></div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>210:30h</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <!-- /Project table -->
@@ -313,22 +326,6 @@
                             </div>
                             <!-- /Activity Timeline -->
 
-                            <!-- Invoice table -->
-                            <div class="card">
-                                <table class="invoice-table table text-nowrap">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>#ID</th>
-                                        <th><i data-feather="trending-up"></i></th>
-                                        <th>TOTAL Paid</th>
-                                        <th class="text-truncate">Issued Date</th>
-                                        <th class="cell-fit">Actions</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <!-- /Invoice table -->
                         </div>
                         <!--/ User Content -->
                     </div>
@@ -548,48 +545,46 @@
                     </div>
                 </div>
                 <!--/ upgrade your plan Modal -->
-
             </div>
         </div>
     </div>
 {% endblock content %}
 <!-- END: Content-->
 
-{% block js %}
-    <!-- BEGIN: Vendor JS-->
-    <script src="{% static 'app-assets/vendors/js/vendors.min.js' %}"></script>
-    <!-- BEGIN Vendor JS-->
+<!-- BEGIN: Page Vendor JS-->
+{% block page_vendor_js %}
+<script src="{% static 'app-assets/vendors/js/forms/select/select2.full.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/forms/cleave/cleave.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/forms/validation/jquery.validate.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/moment.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.bootstrap5.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/datatables.buttons.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/jszip.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/pdfmake.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/vfs_fonts.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/buttons.html5.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/buttons.print.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.rowGroup.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/polyfill.min.js' %}"></script>
+{% endblock page_vendor_js %}
+<!-- END: Page Vendor JS-->
 
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{% static 'app-assets/vendors/js/forms/select/select2.full.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/forms/cleave/cleave.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/forms/validation/jquery.validate.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/extensions/moment.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.bootstrap5.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/responsive.bootstrap5.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/datatables.buttons.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/jszip.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/pdfmake.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/vfs_fonts.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/buttons.print.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/tables/datatable/dataTables.rowGroup.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/extensions/sweetalert2.all.min.js' %}"></script>
-    <script src="{% static 'app-assets/vendors/js/extensions/polyfill.min.js' %}"></script>
-    <!-- END: Page Vendor JS-->
+<!-- BEGIN: Theme JS-->
+{% block theme_js %}
+<script src="{% static 'app-assets/js/core/app-menu.min.js' %}"></script>
+<script src="{% static 'app-assets/js/core/app.min.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/customizer.min.js' %}"></script>
+{% endblock theme_js %}
+<!-- END: Theme JS-->
 
-    <!-- BEGIN: Theme JS-->
-    <script src="{% static 'app-assets/js/core/app-menu.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/core/app.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/scripts/customizer.min.js' %}"></script>
-    <!-- END: Theme JS-->
+<!-- BEGIN: Page JS-->
+{% block page_js %}
+<script src="{% static 'app-assets/js/scripts/pages/modal-edit-user.min.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/pages/app-user-view.min.js' %}"></script>
+{% endblock page_js %}
+<!-- END: Page JS-->
 
-    <!-- BEGIN: Page JS-->
-    <script src="{% static 'app-assets/js/scripts/pages/modal-edit-user.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/scripts/pages/app-user-view-account.min.js' %}"></script>
-    <script src="{% static 'app-assets/js/scripts/pages/app-user-view.min.js' %}"></script>
-    <!-- END: Page JS-->
-{% endblock js %}

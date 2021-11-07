@@ -18,9 +18,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
           rel="stylesheet">
 
-    <!-- BEGIN: CSS-->
-    {% block css %}{% endblock css %}
-    <!-- END: CSS-->
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/vendors.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/toastr.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/extensions/sweetalert2.min.css' %}">
+    {% block vendor_css %}{% endblock vendor_css %}
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    {% block theme_css %}{% endblock theme_css %}
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'app-assets/css/plugins/extensions/ext-component-sweet-alerts.min.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'app-assets/css/plugins/extensions/ext-component-toastr.min.css' %}">
+    {% block page_css %}{% endblock page_css %}
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    {% block custom_css %}{% endblock custom_css %}
+    <!-- END: Custom CSS-->
 
 </head>
 <!-- END: Head-->
@@ -482,21 +502,33 @@
                                                   data-i18n="Dashboards">Dashboards</span><span
                     class="badge badge-light-warning rounded-pill ms-auto me-1">2</span></a>
                 <ul class="menu-content">
-                    <li {% block analytics_active %}{% endblock %}><a class="d-flex align-items-center" href="dashboard-analytics.html"><i
+                    <li {% block analytics_active %}{% endblock %}><a class="d-flex align-items-center"
+                                                                      href="dashboard-analytics.html"><i
                             data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Analytics">Analytics</span></a>
                     </li>
-                    <li {% block ecommerce_active %}{% endblock %}><a class="d-flex align-items-center" href="dashboard-ecommerce.html"><i
+                    <li {% block ecommerce_active %}{% endblock %}><a class="d-flex align-items-center"
+                                                                      href="dashboard-ecommerce.html"><i
                             data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="eCommerce">eCommerce</span></a>
                     </li>
                 </ul>
             </li>
+            <li class=" navigation-header"><span data-i18n="Settings">From zero to friend</span><i
+                    data-feather="more-horizontal"></i>
+            </li>
+            <li {% block feature_active %}{% endblock %}>
+                <a class="d-flex align-items-center" href="{% url 'features' %}">
+                    <i data-feather="box"></i>
+                    <span class="menu-title text-truncate" data-i18n="Tính năng">Tính năng</span>
+                </a>
+            </li>
             <li class=" navigation-header"><span data-i18n="Settings">Settings</span><i
-                    data-feather="more-horizontal"></i>z
+                    data-feather="more-horizontal"></i>
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="user"></i><span
                     class="menu-title text-truncate" data-i18n="User">User</span></a>
                 <ul class="menu-content">
-                    <li {% block account_active %}{% endblock %} ><a class="d-flex align-items-center" href="{% url 'user-account' %}"><i
+                    <li {% block account_active %}{% endblock %} ><a class="d-flex align-items-center"
+                                                                     href="{% url 'user-account' %}"><i
                             data-feather="circle"></i><span
                             class="menu-item text-truncate" data-i18n="Account">Account</span></a>
                     </li>
@@ -513,7 +545,8 @@
                             data-feather="circle"></i><span
                             class="menu-item text-truncate" data-i18n="Notifications">Notifications</span></a>
                     </li>
-                    <li><a class="d-flex align-items-center" href="app-user-view-connections.html"><i
+                    <li {% block connections_active %}{% endblock %} ><a class="d-flex align-items-center"
+                                                                         href="{% url 'user-account-connections' %}"><i
                             data-feather="circle"></i><span
                             class="menu-item text-truncate" data-i18n="Connections">Connections</span></a>
                     </li>
@@ -694,9 +727,66 @@
 <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
 <!-- END: Footer-->
 
-<!-- BEGIN: JS-->
-{% block js %}{% endblock js %}
-<!-- BEGIN JS-->
+<!-- BEGIN: Vendor JS-->
+<script src="{% static 'app-assets/vendors/js/vendors.min.js' %}"></script>
+{% block vendor_js %}{% endblock vendor_js %}
+<!-- BEGIN Vendor JS-->
+
+<!-- BEGIN: Page Vendor JS-->
+<script src="{% static 'app-assets/vendors/js/extensions/sweetalert2.all.min.js' %}"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/toastr.min.js' %}"></script>
+{% block page_vendor_js %}{% endblock page_vendor_js %}
+<!-- END: Page Vendor JS-->
+
+<!-- BEGIN: Theme JS-->
+{% block theme_js %}{% endblock theme_js %}
+<!-- END: Theme JS-->
+
+<!-- BEGIN: Page JS-->
+<script src="{% static 'app-assets/js/scripts/extensions/ext-component-toastr.min.js' %}"></script>
+{% block page_js %}{% endblock page_js %}
+<!-- END: Page JS-->
+
+<!-- BEGIN: Page Custom JS-->
+{% block page_custom_js %}{% endblock page_custom_js %}
+<!-- END: Page Custom JS-->
+
+<!-- BEGIN: Messages JS-->
+{% if messages %}
+    <script>
+        $(window).on('load', function () {
+            {% for message in messages %}
+                {% if message.extra_tags == 'center_notification' %}
+                    setTimeout(function () {
+                        Swal.fire({
+                            title: '{{ message.level_tag | upper }}!',
+                            text: '{{ message }}',
+                            icon: '{{ message.level_tag }}',
+                            customClass: {
+                                confirmButton: 'btn btn-primary'
+                            },
+                            buttonsStyling: false
+                        });
+                    }, 1200);
+                {% else %}
+                    var isRtl = $('html').attr('data-textdirection') === 'rtl';
+                    setTimeout(function () {
+                        toastr['{{ message.level_tag }}'](
+                            '{{ message }}',
+                            '👋 Thông báo!',
+                            {
+                                closeButton: true,
+                                tapToDismiss: false,
+                                rtl: isRtl
+                            }
+                        );
+                    }, 1800);
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+{% endif %}
+<!-- END: Messages JS-->
 
 <script>
     $(window).on('load', function () {
