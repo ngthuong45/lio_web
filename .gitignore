@@ -142,4 +142,6 @@ cython_debug/
 *.idea
 
 # Project
-**/migrations/*
+**/migrations/**/
+#**/migrations/**
+#!**/migrations/**/.gitkeep
