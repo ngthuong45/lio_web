@@ -35,8 +35,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = int(os.environ.get('DEBUG'))  # 1 == True, 0 == False
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
+BASE_URL = os.environ.get('BASE_URL', 'https://3138-113-172-95-38.ap.ngrok.io')
 
 # Application definition
+AUTH_USER_MODEL = 'accounts.User'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -55,7 +57,10 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
 
     # My App
+    'accounts',
     'pages',
+    'features',
+    'zalo',
 ]
 
 MIDDLEWARE = [
@@ -116,8 +121,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
 # Username
-ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Login
 LOGIN_REDIRECT_URL = 'homepage'
@@ -201,3 +206,12 @@ STATICFILES_FINDERS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Config Zalo
+ZALO_URL_SECRET_KEY = os.environ.get('ZALO_URL_SECRET_KEY')
+ZALO_APP_ID = os.environ.get('ZALO_APP_ID')
+ZALO_APP_KEY = os.environ.get('ZALO_APP_KEY')
+ZALO_OA_SECRET_KEY = os.environ.get('ZALO_OA_SECRET_KEY')
+
+# Config Message Django
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

@@ -4,7 +4,6 @@ on:
   # opening a pull request to master and develop branch will be a trigger
   pull_request:
     branches:
-      - develop
       - main
   # any code pushed to master and develop branch will also be a trigger
   push:
@@ -61,6 +60,7 @@ jobs:
             sudo rm -rf .env.prod
             echo "DEBUG=1" >> .env.prod
             echo "SECRET_KEY=${{ secrets.SECRET_KEY_PROD }}" >> .env.prod
+            echo "BASE_URL=${{ secrets.BASE_URL_PROD }}" >> .env.prod
             echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS_PROD }}" >> .env.prod
             echo "SQL_ENGINE=django.db.backends.postgresql" >> .env.prod
             echo "SQL_DATABASE=${{ secrets.POSTGRESQL_DATABASE_PROD }}" >> .env.prod
@@ -68,6 +68,10 @@ jobs:
             echo "SQL_PASSWORD=${{ secrets.POSTGRESQL_PASSWORD_PROD }}" >> .env.prod
             echo "SQL_HOST=${{ secrets.POSTGRESQL_HOST_PROD }}" >> .env.prod
             echo "SQL_PORT=${{ secrets.POSTGRESQL_PORT_PROD }}" >> .env.prod
+            echo "ZALO_URL_SECRET_KEY=${{ secrets.ZALO_URL_SECRET_KEY_PROD }}" >> .env.prod
+            echo "ZALO_APP_ID=${{ secrets.ZALO_APP_ID_PROD }}" >> .env.prod
+            echo "ZALO_APP_KEY=${{ secrets.ZALO_APP_KEY_PROD }}" >> .env.prod
+            echo "ZALO_OA_SECRET_KEY=${{ secrets.ZALO_OA_SECRET_KEY_PROD }}" >> .env.prod
             python manage.py makemigrations
             python manage.py migrate
             python manage.py collectstatic
