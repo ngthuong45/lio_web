@@ -54,11 +54,11 @@ jobs:
           password: ${{ secrets.SERVER_PRODUCTION_PASSWORD }}
           script: |
             source /usr/local/lsws/Example/html/bin/activate
-            pip install -r requirements.txt
             cd /usr/local/lsws/Example/html/
             sudo rm -rf lio_web
             git clone https://${{ secrets.__GITHUB_PERSONAL_TOKEN }}@github.com/ngthuong45/lio_web.git main
             cd lio_web
+            pip install -r requirements.txt
             echo "DEBUG=1" >> .env.prod
             echo "SECRET_KEY=${{ secrets.SECRET_KEY_PROD }}" >> .env.prod
             echo "BASE_URL=${{ secrets.BASE_URL_PROD }}" >> .env.prod
