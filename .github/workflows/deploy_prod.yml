@@ -56,7 +56,7 @@ jobs:
             source /usr/local/lsws/Example/html/bin/activate
             cd /usr/local/lsws/Example/html/
             sudo rm -rf lio_web
-            git clone https://${{ secrets.__GITHUB_PERSONAL_TOKEN }}@github.com/ngthuong45/lio_web.git main
+            git clone https://${{ secrets.__GITHUB_PERSONAL_TOKEN }}@github.com/ngthuong45/lio_web.git
             cd lio_web
             pip install -r requirements.txt
             echo "DEBUG=1" >> .env.prod
